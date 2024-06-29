@@ -8,11 +8,24 @@ router.get('/', function (req, res, next) {
   });
 });
 
+
 router.get('/profile', requiresAuth(), function (req, res, next) {
   res.render('profile', {
     userProfile: JSON.stringify(req.oidc.user, null, 2),
     title: 'Profile page'
   });
 });
+
+router.get('/dashboard', requiresAuth(), function (req, res, next) {
+  res.render('dashboard', {
+    title: 'Dashboard page'
+  });
+
+});
+
+//Store User Data upon Login
+
+
+
 
 module.exports = router;

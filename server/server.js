@@ -5,8 +5,9 @@ const logger = require('morgan');
 const path = require('path');
 const router = require('./routes/index');
 const { auth } = require('express-openid-connect');
+const { MongoClient } = require('mongodb');
 
-dotenv.load();
+dotenv.config();
 
 const app = express();
 
@@ -17,15 +18,16 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
+const port = process.env.PORT || 3000;  // Define port before using it
+
 const config = {
   authRequired: false,
-  auth0Logout: true
+  auth0Logout: true,
+  secret: process.env.AUTH0_CLIENT_SECRET,
+  baseURL: process.env.BASE_URL || `http://localhost:${port}`,
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`
 };
-
-const port = process.env.PORT || 3000;
-if (!config.baseURL && !process.env.BASE_URL && process.env.PORT && process.env.NODE_ENV !== 'production') {
-  config.baseURL = `http://localhost:${port}`;
-}
 
 app.use(auth(config));
 
@@ -36,6 +38,8 @@ app.use(function (req, res, next) {
 });
 
 app.use('/', router);
+
+
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
