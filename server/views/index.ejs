@@ -1,9 +1,26 @@
 <%- include('partials/header') -%>
 
-<h1 class="text-4xl">Hello World</h1>
+
 
 <% if (locals.isAuthenticated) { %>
-    <p>You are logged in. <a href="/profile" class="underline">View your profile</a>.</p>
+
+<h1 class="text-4xl">Hiyaaa <%= user.name %></h1>
+<h1 class="text-4xl mb-4"><%= user.nickname %></h1>
+<h2 class="text-3xl mb-2">Your email: <%= user.email %></h2>
+
+<h2 class="text-3xl mb-2">Welcome <%= user.nickname %></h2>
+
+<% if (user.picture) { %>
+  <img class="block py-3" src="<%= user.picture %>" width="300">
+<% } %>
+
+<p class="py-3">
+  Hi, dashboard for  <%= user.nickname %></code>.<br>
+</p>
+
+
+
+
 <% } else { %>
     <p>You are not logged in. <a href="/login" class="underline">Login</a>.</p>
 <% } %>

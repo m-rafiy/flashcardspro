@@ -6,6 +6,10 @@ const path = require('path');
 const router = require('./routes/index');
 const { auth } = require('express-openid-connect');
 const { MongoClient } = require('mongodb');
+const { requiresAuth } = require('express-openid-connect');
+const bodyParser = require('body-parser');
+const { callbackify } = require('util');
+
 
 dotenv.config();
 
@@ -24,9 +28,13 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.AUTH0_CLIENT_SECRET,
-  baseURL: process.env.BASE_URL || `http://localhost:${port}`,
+  baseURL: 'http://localhost:3000',
   clientID: process.env.AUTH0_CLIENT_ID,
-  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
+   
+  
+  
+  
 };
 
 app.use(auth(config));
@@ -36,6 +44,8 @@ app.use(function (req, res, next) {
   res.locals.user = req.oidc.user;
   next();
 });
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', router);
 
@@ -47,6 +57,9 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
+
 
 // Error handlers
 app.use(function (err, req, res, next) {

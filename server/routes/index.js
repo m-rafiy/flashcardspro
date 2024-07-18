@@ -1,4 +1,6 @@
 var router = require('express').Router();
+const express = require('express');
+
 const { requiresAuth } = require('express-openid-connect');
 
 router.get('/', function (req, res, next) {
@@ -23,7 +25,10 @@ router.get('/dashboard', requiresAuth(), function (req, res, next) {
 
 });
 
-//Store User Data upon Login
+
+
+
+
 
 
 
