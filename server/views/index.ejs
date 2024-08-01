@@ -4,11 +4,12 @@
 
 <% if (locals.isAuthenticated) { %>
 
-<h1 class="text-4xl">Hiyaaa <%= user.name %></h1>
+<h1 class="text-4xl">Hi <%= user.name %></h1>
 <h1 class="text-4xl mb-4"><%= user.nickname %></h1>
 <h2 class="text-3xl mb-2">Your email: <%= user.email %></h2>
 
-<h2 class="text-3xl mb-2">Welcome <%= user.nickname %></h2>
+<h2 class="text-3xl mb-2">Welcome <%= user.given_name %></h2>
+
 
 <% if (user.picture) { %>
   <img class="block py-3" src="<%= user.picture %>" width="300">
