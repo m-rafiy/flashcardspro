@@ -1,44 +1,53 @@
+<%- include('partials/header') -%>
 
-<!-- views/dashboard.ejs -->
-<div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    <h1>Welcome, <%= user.name %></h1>
-    
-    <h2>Add a New Flashcard</h2>
-    <form action="/add-flashcard" method="POST">
-        <label for="question">Question:</label>
-        <input type="text" id="question" name="question" required><br>
-        
-        <label for="answer">Answer:</label>
-        <input type="text" id="answer" name="answer" required><br>
-        
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category"><br>
-        
-        <button type="submit">Add Flashcard</button>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-4xl mb-8">Welcome, <%= user.name %></h1>
+  
+  <div class="mb-12">
+    <h2 class="text-2xl mb-4">Add a New Flashcard</h2>
+    <form action="/add-flashcard" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="question">
+          Question:
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question" type="text" name="question" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="answer">
+          Answer:
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="answer" type="text" name="answer" required>
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+          Category:
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category" type="text" name="category">
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Add Flashcard
+        </button>
+      </div>
     </form>
+  </div>
 
-    <h2>Your Flashcards</h2>
-<% if (flashcards && flashcards.length > 0) { %>
-  <ul>
-  <% flashcards.forEach(card => { %>
-    <li>
-      <strong>Question:</strong> <%= card.question %><br>
-      <strong>Answer:</strong> <%= card.answer %><br>
-      <strong>Category:</strong> <%= card.category || 'N/A' %>
-    </li>
-  <% }); %>
-  </ul>
-<% } else { %>
-  <p>You haven't created any flashcards yet.</p>
-<% } %>
-</body>
-</html>
+  <div>
+    <h2 class="text-2xl mb-4">Your Flashcards</h2>
+    <% if (flashcards && flashcards.length > 0) { %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% flashcards.forEach(card => { %>
+          <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h3 class="font-bold text-lg mb-2">Question: <%= card.question %></h3>
+            <p class="mb-2"><strong>Answer:</strong> <%= card.answer %></p>
+            <p><strong>Category:</strong> <%= card.category || 'N/A' %></p>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p class="text-gray-600">You haven't created any flashcards yet.</p>
+    <% } %>
+  </div>
 </div>
+
+<%- include('partials/footer') -%>
