@@ -1,20 +1,44 @@
-<%- include('partials/header') -%>
 
-<h1 class="text-4xl mb-4">Dashboard</h1>
+<!-- views/dashboard.ejs -->
+<div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, <%= user.name %></h1>
+    
+    <h2>Add a New Flashcard</h2>
+    <form action="/add-flashcard" method="POST">
+        <label for="question">Question:</label>
+        <input type="text" id="question" name="question" required><br>
+        
+        <label for="answer">Answer:</label>
+        <input type="text" id="answer" name="answer" required><br>
+        
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category"><br>
+        
+        <button type="submit">Add Flashcard</button>
+    </form>
 
-<h2 class="text-3xl mb-2">Welcome <%= user.name %></h2>
-
-<% if (user.picture) { %>
-  <img class="block py-3" src="<%= user.picture %>" width="300">
+    <h2>Your Flashcards</h2>
+<% if (flashcards && flashcards.length > 0) { %>
+  <ul>
+  <% flashcards.forEach(card => { %>
+    <li>
+      <strong>Question:</strong> <%= card.question %><br>
+      <strong>Answer:</strong> <%= card.answer %><br>
+      <strong>Category:</strong> <%= card.category || 'N/A' %>
+    </li>
+  <% }); %>
+  </ul>
+<% } else { %>
+  <p>You haven't created any flashcards yet.</p>
 <% } %>
-
-<p class="py-3">
-  Hi, dashboard for <%= user.name %>.<br>
-  Email: <%= user.email %>
-</p>
-
-<% if (user.auth0Id) { %>
-  <p>Auth0 ID: <%= user.auth0Id %></p>
-<% } %>
-
-<%- include('partials/footer') -%>
+</body>
+</html>
+</div>
