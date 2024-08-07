@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requiresAuth } = require('express-openid-connect');
-const mongoose = require('mongoose');
-
-// User model
-const User = mongoose.model('User', new mongoose.Schema({
-  auth0Id: String,
-  name: String,
-  email: String
-}));
+const User = require('../models/users');  // Updated path
 
 router.get('/', function (req, res, next) {
   res.render('index', {
@@ -26,6 +19,7 @@ router.get('/profile', requiresAuth(), function (req, res, next) {
 
 router.get('/dashboard', requiresAuth(), async (req, res) => {
   try {
+    console.log('Connected to database to get info')
     let user = await User.findOne({ auth0Id: req.oidc.user.sub });
     if (!user) {
       user = new User({
