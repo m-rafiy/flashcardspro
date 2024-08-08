@@ -26,15 +26,16 @@ FlashcardPro is a web application that allows users to create and manage flashca
 - Ensure your MongoDB URI in the `.env` file points to your database
 
 5. Set up your `.env` file in the root directory with the following structure:
-   
-    AUTH0_CLIENT_ID=
-    ISSUER_BASE_URL=
-    SECRET=
-    PORT=
-    AUTH0_CLIENT_SECRET=
-    AUTH0_DOMAIN=
-    BASE_URL=
-    MONGODB_URI= (local connection e.g mongodb://localhost:27017/flashcardspro)
+
+   ```env
+   AUTH0_CLIENT_ID=your_auth0_client_id
+   ISSUER_BASE_URL=https://your_auth0_domain
+   SECRET=your_secret_key
+   PORT=3000
+   AUTH0_CLIENT_SECRET=your_auth0_client_secret
+   AUTH0_DOMAIN=your_auth0_domain
+   BASE_URL=http://localhost:3000
+   MONGODB_URI=mongodb://localhost:27017/flashcardspro
 
 6. Start the application: npm start
 
