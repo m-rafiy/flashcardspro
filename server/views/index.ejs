@@ -1,57 +1,64 @@
 <%- include('partials/header') -%>
 
 <div class="container mx-auto px-4 py-8">
-  <% if (locals.isAuthenticated) { %>
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <div class="flex items-center mb-6">
-        <% if (user.picture) { %>
-          <img class="w-20 h-20 rounded-full mr-4" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-stretch gap-8">
+      <!-- Left side with welcome text - more bubbly design -->
+      <div class="w-full md:w-1/2 p-8 flex flex-col justify-center bg-white rounded-3xl shadow-md transform hover:scale-105 transition duration-300 ease-in-out">
+        <h2 class="text-3xl font-bold mb-4 text-blue-600">Welcome to Flashcards Pro</h2>
+        <p class="text-gray-600 text-lg mb-6">
+          Master any subject with our intuitive flashcard system. Learn, revise, and excel!
+        </p>
+        <% if (locals.isAuthenticated) { %>
+          <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full inline-block transition duration-300 text-center">
+            Go to Dashboard
+          </a>
+        <% } %>
+      </div>
+      
+      <!-- Right side with login button or user info -->
+      <div class="w-full md:w-1/2 p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
+        <% if (!locals.isAuthenticated) { %>
+          <div class="text-center">
+            <h3 class="text-2xl font-bold text-blue-600 mb-4">Get Started</h3>
+            <p class="text-gray-600 mb-6">Sign in to create and manage your flashcards.</p>
+            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full inline-block transition duration-300">
+              Sign In
+            </a>
+          </div>
         <% } else { %>
-          <div class="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center mr-4">
-            <span class="text-2xl text-gray-600"><%= user.name.charAt(0) %></span>
+          <div class="space-y-6">
+            <div class="flex items-center mb-4">
+              <% if (user.picture) { %>
+                <img class="w-20 h-20 rounded-full mr-6" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
+              <% } else { %>
+                <div class="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center mr-6">
+                  <span class="text-2xl font-bold text-white"><%= user.name.charAt(0) %></span>
+                </div>
+              <% } %>
+              <div>
+                <h3 class="text-2xl font-bold text-blue-600"><%= user.name %></h3>
+                <p class="text-gray-600"><%= user.nickname %></p>
+              </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-inner">
+              <h4 class="text-lg font-semibold mb-3 text-gray-700">Account Information</h4>
+              <p class="mb-2"><strong>Email:</strong> <%= user.email %></p>
+              <p><strong>Given Name:</strong> <%= user.given_name %></p>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="/profile" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
+                View Profile
+              </a>
+              <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
+                Logout
+              </a>
+            </div>
           </div>
         <% } %>
-        <div>
-          <h1 class="text-3xl font-bold"><%= user.name %></h1>
-          <p class="text-gray-600"><%= user.nickname %></p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-gray-100 p-4 rounded">
-          <h2 class="text-xl font-semibold mb-2">Personal Information</h2>
-          <p><strong>Email:</strong> <%= user.email %></p>
-          <p><strong>Given Name:</strong> <%= user.given_name %></p>
-        </div>
-        <div class="bg-gray-100 p-4 rounded">
-          <h2 class="text-xl font-semibold mb-2">Account Details</h2>
-          <p><strong>User ID:</strong> <%= user.sub %></p>
-          <p><strong>Last Login:</strong> <%= new Date().toLocaleDateString() %></p>
-        </div>
-      </div>
-
-      <div class="mt-6">
-        <h2 class="text-2xl font-bold mb-4">Welcome to Your Dashboard</h2>
-        <p class="text-gray-700">
-          Hello <%= user.given_name %>, this is your personalized dashboard. Here you can manage your account, view your activity, and access various features.
-        </p>
-      </div>
-
-      <div class="mt-6">
-        <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-          Logout
-        </a>
       </div>
     </div>
-  <% } else { %>
-    <div class="text-center">
-      <h2 class="text-2xl font-bold mb-4">You are not logged in</h2>
-      <p class="mb-4">Please log in to access your dashboard and account information.</p>
-      <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-        Login
-      </a>
-    </div>
-  <% } %>
+  </div>
 </div>
 
 <%- include('partials/footer') -%>

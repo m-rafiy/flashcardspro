@@ -1,31 +1,31 @@
 <%- include('partials/header') -%>
 
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-4xl mb-8">Welcome, <%= user.name %></h1>
+  <h1 class="text-4xl mb-8 text-blue-600 font-bold">Welcome, <%= user.name %></h1>
   
   <div class="mb-12">
-    <h2 class="text-2xl mb-4">Add a New Flashcard</h2>
-    <form action="/add-flashcard" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 class="text-2xl mb-4 text-blue-500 font-semibold">Add a New Flashcard</h2>
+    <form action="/add-flashcard" method="POST" class="bg-white shadow-lg rounded-3xl px-8 pt-6 pb-8 mb-4 transform transition duration-300 hover:scale-105">
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="question">
           Question:
         </label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question" type="text" name="question" required>
+        <input class="shadow appearance-none border rounded-full w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 transition duration-300" id="question" type="text" name="question" required>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="answer">
           Answer:
         </label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="answer" type="text" name="answer" required>
+        <input class="shadow appearance-none border rounded-full w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 transition duration-300" id="answer" type="text" name="answer" required>
       </div>
       <div class="mb-6">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
           Category:
         </label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category" type="text" name="category">
+        <input class="shadow appearance-none border rounded-full w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 transition duration-300" id="category" type="text" name="category">
       </div>
       <div class="flex items-center justify-between">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full focus:outline-none focus:shadow-outline transform transition duration-300 hover:scale-105" type="submit">
           Add Flashcard
         </button>
       </div>
@@ -33,19 +33,19 @@
   </div>
 
   <div>
-    <h2 class="text-2xl mb-4">Your Flashcards</h2>
+    <h2 class="text-2xl mb-4 text-blue-500 font-semibold">Your Flashcards</h2>
     <% if (flashcards && flashcards.length > 0) { %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <% flashcards.forEach(card => { %>
-          <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h3 class="font-bold text-lg mb-2">Question: <%= card.question %></h3>
-            <p class="mb-2"><strong>Answer:</strong> <%= card.answer %></p>
-            <p><strong>Category:</strong> <%= card.category || 'N/A' %></p>
+          <div class="bg-white shadow-lg rounded-3xl px-6 pt-6 pb-6 mb-4 transform transition duration-300 hover:scale-105">
+            <h3 class="font-bold text-lg mb-3 text-blue-600">Question: <%= card.question %></h3>
+            <p class="mb-3"><strong class="text-gray-700">Answer:</strong> <%= card.answer %></p>
+            <p><strong class="text-gray-700">Category:</strong> <%= card.category || 'N/A' %></p>
           </div>
         <% }); %>
       </div>
     <% } else { %>
-      <p class="text-gray-600">You haven't created any flashcards yet.</p>
+      <p class="text-gray-600 bg-white shadow-lg rounded-3xl px-6 py-4 inline-block">You haven't created any flashcards yet.</p>
     <% } %>
   </div>
 </div>
