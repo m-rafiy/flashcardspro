@@ -1,29 +1,57 @@
 <%- include('partials/header') -%>
 
+<div class="container mx-auto px-4 py-8">
+  <% if (locals.isAuthenticated) { %>
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex items-center mb-6">
+        <% if (user.picture) { %>
+          <img class="w-20 h-20 rounded-full mr-4" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
+        <% } else { %>
+          <div class="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center mr-4">
+            <span class="text-2xl text-gray-600"><%= user.name.charAt(0) %></span>
+          </div>
+        <% } %>
+        <div>
+          <h1 class="text-3xl font-bold"><%= user.name %></h1>
+          <p class="text-gray-600"><%= user.nickname %></p>
+        </div>
+      </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-100 p-4 rounded">
+          <h2 class="text-xl font-semibold mb-2">Personal Information</h2>
+          <p><strong>Email:</strong> <%= user.email %></p>
+          <p><strong>Given Name:</strong> <%= user.given_name %></p>
+        </div>
+        <div class="bg-gray-100 p-4 rounded">
+          <h2 class="text-xl font-semibold mb-2">Account Details</h2>
+          <p><strong>User ID:</strong> <%= user.sub %></p>
+          <p><strong>Last Login:</strong> <%= new Date().toLocaleDateString() %></p>
+        </div>
+      </div>
 
-<% if (locals.isAuthenticated) { %>
+      <div class="mt-6">
+        <h2 class="text-2xl font-bold mb-4">Welcome to Your Dashboard</h2>
+        <p class="text-gray-700">
+          Hello <%= user.given_name %>, this is your personalized dashboard. Here you can manage your account, view your activity, and access various features.
+        </p>
+      </div>
 
-<h1 class="text-4xl">Hi <%= user.name %></h1>
-<h1 class="text-4xl mb-4"><%= user.nickname %></h1>
-<h2 class="text-3xl mb-2">Your email: <%= user.email %></h2>
-
-<h2 class="text-3xl mb-2">Welcome <%= user.given_name %></h2>
-
-
-<% if (user.picture) { %>
-  <img class="block py-3" src="<%= user.picture %>" width="300">
-<% } %>
-
-<p class="py-3">
-  Hi, dashboard for  <%= user.nickname %></code>.<br>
-</p>
-
-
-
-
-<% } else { %>
-    <p>You are not logged in. <a href="/login" class="underline">Login</a>.</p>
-<% } %>
+      <div class="mt-6">
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+          Logout
+        </a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="text-center">
+      <h2 class="text-2xl font-bold mb-4">You are not logged in</h2>
+      <p class="mb-4">Please log in to access your dashboard and account information.</p>
+      <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        Login
+      </a>
+    </div>
+  <% } %>
+</div>
 
 <%- include('partials/footer') -%>
