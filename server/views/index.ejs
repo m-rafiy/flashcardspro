@@ -2,31 +2,31 @@
 
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-6xl mx-auto">
-    <div class="flex flex-col md:flex-row items-stretch gap-8">
-      <!-- Left side with welcome text - more bubbly design -->
-      <div class="w-full md:w-1/2 p-8 flex flex-col justify-center bg-white rounded-3xl shadow-md transform hover:scale-105 transition duration-300 ease-in-out">
-        <h2 class="text-3xl font-bold mb-4 text-blue-600">Welcome to Flashcards Pro</h2>
-        <p class="text-gray-600 text-lg mb-6">
-          Master any subject with our intuitive flashcard system. Learn, revise, and excel!
-        </p>
-        <% if (locals.isAuthenticated) { %>
-          <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full inline-block transition duration-300 text-center">
-            Go to Dashboard
-          </a>
+    <div class="flex flex-col items-stretch gap-8">
+      <!-- Welcome text and image - centered design -->
+      
+
+        
+
+        <% if (!locals.isAuthenticated) { %>
+          <div class="w-full p-8 flex flex-col justify-center items-center bg-white rounded-3xl shadow-md transform hover:scale-105 transition duration-300 ease-in-out text-center">
+            <h2 class="text-4xl font-bold mb-4 text-blue-600">Welcome to Flashcards Pro</h2>
+            <p class="text-gray-600 text-xl mb-8 max-w-2xl">
+              Master any subject with our intuitive flashcard system. Learn, revise, and excel!
+            </p>
+            
+          <div class="space-y-4">
+            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full inline-block transition duration-300 text-lg">
+              Get Started
+            </a>
+            <p class="text-gray-500">Sign in to create and manage your flashcards</p>
+          </div>
         <% } %>
       </div>
       
-      <!-- Right side with login button or user info -->
-      <div class="w-full md:w-1/2 p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
-        <% if (!locals.isAuthenticated) { %>
-          <div class="text-center">
-            <h3 class="text-2xl font-bold text-blue-600 mb-4">Get Started</h3>
-            <p class="text-gray-600 mb-6">Sign in to create and manage your flashcards.</p>
-            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full inline-block transition duration-300">
-              Sign In
-            </a>
-          </div>
-        <% } else { %>
+      <!-- User info section (only shown when authenticated) -->
+      <% if (locals.isAuthenticated) { %>
+        <div class="w-full p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
           <div class="space-y-6">
             <div class="flex items-center mb-4">
               <% if (user.picture) { %>
@@ -55,8 +55,8 @@
               </a>
             </div>
           </div>
-        <% } %>
-      </div>
+        </div>
+      <% } %>
     </div>
   </div>
 </div>

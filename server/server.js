@@ -70,3 +70,6 @@ http.createServer(app)
   .listen(port, () => {
     console.log(`Listening on ${config.baseURL}`);
   });
+
+
+  app.use('server/images', express.static(__dirname + '/images'));

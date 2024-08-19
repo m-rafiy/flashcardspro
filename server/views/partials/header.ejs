@@ -7,29 +7,38 @@
   <link rel="shortcut icon" href="//cdn2.auth0.com/styleguide/latest/lib/logos/img/favicon.png">
 </head>
 <body class="flex flex-col min-h-screen">
-    <nav class="bg-white shadow-md">
+    <header class="bg-white shadow-md">
         <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <a href="/" class="flex-shrink-0">
                         <span class="font-bold text-xl text-blue-500">Flashcards Pro</span>
                     </a>
-                    <% if (locals.user) { %>
-                        <div class="hidden md:block ml-10">
-                            <a href="/" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                            <a href="/profile" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
-                            <a href="/dashboard" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                        </div>
-                    <% } %>
                 </div>
-                <% if (locals.user) { %>
-                    <div class="flex items-center">
+                <nav class="hidden md:flex space-x-4">
+                    <% if (locals.user) { %>
+                        <a href="/" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="/profile" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+                        <a href="/dashboard" class="text-gray-600 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <% } %>
+                </nav>
+                <div class="flex items-center space-x-2">
+                    <% if (locals.user) { %>
                         <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full text-sm transition duration-300">
                             Logout
                         </a>
-                    </div>
-                <% } %>
+                    <% } else { %>
+                        <a href="/login" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm transition duration-300">
+                            Login
+                        </a>
+                        <a href="/login" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-sm transition duration-300">
+                            Sign Up
+                        </a>
+                    <% } %>
+                </div>
             </div>
         </div>
-    </nav>
-    <main class="flex-grow">
+    </header>
+    
+</body>
+</html>
