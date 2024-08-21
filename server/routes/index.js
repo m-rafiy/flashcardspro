@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { requiresAuth } = require('express-openid-connect');
 const User = require('../models/users');  // Updated path
+const mongoose = require('mongoose');
+
 
 router.get('/', function (req, res, next) {
   res.render('index', {
-    title: 'Auth0 Webapp sample Nodejs',
+    title: 'FlashcardsPro',
     isAuthenticated: req.oidc.isAuthenticated()
   });
 });
@@ -44,6 +46,8 @@ router.get('/dashboard', requiresAuth(), async (req, res) => {
 
 
 router.post('/add-flashcard', requiresAuth(), async (req, res) => {
+  console.log('add flashcard route hit');  // This should appear immediately
+
   try {
     const { question, answer, category } = req.body;
     let user = await User.findOne({ auth0Id: req.oidc.user.sub });
@@ -74,5 +78,48 @@ router.post('/add-flashcard', requiresAuth(), async (req, res) => {
   }
 });
 
+
+router.post('/remove-flashcard', requiresAuth(), async (req, res) => {
+  console.log('Remove flashcard route hit');  // This should appear immediately
+
+  try {
+    const { flashcardId } = req.body;
+    console.log('Flashcard ID:', flashcardId);
+
+    if (!flashcardId) {
+      console.log('No flashcard ID provided');
+      return res.status(400).send('No flashcard ID provided');
+    }
+
+    const user = await User.findOne({ auth0Id: req.oidc.user.sub });
+    console.log('User found:', user ? user.auth0Id : 'No user found');
+
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).send('User not found');
+    }
+
+    const originalCount = user.flashcards.length;
+    user.flashcards = user.flashcards.filter(card => card._id.toString() !== flashcardId);
+    const newCount = user.flashcards.length;
+
+    console.log(`Flashcards before: ${originalCount}, after: ${newCount}`);
+
+    if (originalCount === newCount) {
+      console.log('No flashcard was removed');
+      return res.status(404).send('Flashcard not found');
+    }
+
+    await user.save();
+    console.log('User saved successfully');
+
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Error in remove-flashcard route:', error);
+    res.status(500).send('Server error');
+  } finally {
+    console.log('Remove flashcard route completed');  // This should always appear
+  }
+});
 
 module.exports = router;
