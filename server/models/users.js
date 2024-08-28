@@ -3,7 +3,20 @@ const mongoose = require('mongoose');
 const flashcardSchema = new mongoose.Schema({
   question: String,
   answer: String,
-  category: String
+  category: String,
+  deckId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Deck'
+  }
+});
+
+const deckSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const userSchema = new mongoose.Schema({
@@ -12,7 +25,11 @@ const userSchema = new mongoose.Schema({
   email: String,
   flashcards: {
     type: [flashcardSchema],
-    default: []  // This ensures the field is always an array
+    default: []
+  },
+  decks: {
+    type: [deckSchema],
+    default: []
   }
 });
 

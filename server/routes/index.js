@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { requiresAuth } = require('express-openid-connect');
-const User = require('../models/users');  // Updated path
+const User = require('../models/users');
 const mongoose = require('mongoose');
-
 
 router.get('/', function (req, res, next) {
   res.render('index', {
@@ -19,9 +18,6 @@ router.get('/profile', requiresAuth(), function (req, res, next) {
   });
 });
 
-
-
-
 router.get('/dashboard', requiresAuth(), async (req, res) => {
   try {
     console.log('Connected to get info');
@@ -31,46 +27,60 @@ router.get('/dashboard', requiresAuth(), async (req, res) => {
         auth0Id: req.oidc.user.sub,
         name: req.oidc.user.name,
         email: req.oidc.user.email,
-        flashcards: []
+        flashcards: [],
+        decks: [{ name: 'Default Deck', description: 'Your default deck' }]
       });
       await user.save();
     }
-    // Ensure we're passing flashcards, even if it's an empty array
-    const flashcards = user.flashcards || [];
-    res.render('dashboard', { user, flashcards });
+    const flashcards = Array.isArray(user.flashcards) ? user.flashcards : [];
+    const decks = Array.isArray(user.decks) ? user.decks : [];
+    
+    console.log('User:', user);
+    console.log('Flashcards:', flashcards);
+    console.log('Decks:', decks);
+    
+    res.render('dashboard', { user, flashcards, decks });
   } catch (error) {
     console.error('Error fetching user data:', error);
     res.status(500).send('Server error');
   }
 });
 
-
 router.post('/add-flashcard', requiresAuth(), async (req, res) => {
-  console.log('add flashcard route hit');  // This should appear immediately
-
+  console.log('add flashcard route hit');
   try {
-    const { question, answer, category } = req.body;
+    const { question, answer, category, deckId } = req.body;
     let user = await User.findOne({ auth0Id: req.oidc.user.sub });
-    
+
     if (!user) {
-      // If user doesn't exist, create a new one
       user = new User({
         auth0Id: req.oidc.user.sub,
         name: req.oidc.user.name,
         email: req.oidc.user.email,
-        flashcards: []
+        flashcards: [],
+        decks: [{ name: 'Default Deck', description: 'Your default deck' }]
       });
+      await user.save();
     }
-    
-    // Initialize flashcards array if it doesn't exist
+
     if (!user.flashcards) {
       user.flashcards = [];
     }
-    
-    // Add the new flashcard
-    user.flashcards.push({ question, answer, category });
+
+    if (!user.decks || user.decks.length === 0) {
+      user.decks = [{ name: 'Default Deck', description: 'Your default deck' }];
+      await user.save();
+    }
+
+    const defaultDeckId = user.decks[0]._id;
+    user.flashcards.push({ 
+      question, 
+      answer, 
+      category, 
+      deckId: deckId || defaultDeckId 
+    });
     await user.save();
-    
+
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Error adding flashcard:', error);
@@ -78,47 +88,87 @@ router.post('/add-flashcard', requiresAuth(), async (req, res) => {
   }
 });
 
-
 router.post('/remove-flashcard', requiresAuth(), async (req, res) => {
-  console.log('Remove flashcard route hit');  // This should appear immediately
-
+  console.log('Remove flashcard route hit');
   try {
     const { flashcardId } = req.body;
     console.log('Flashcard ID:', flashcardId);
-
+    
     if (!flashcardId) {
       console.log('No flashcard ID provided');
       return res.status(400).send('No flashcard ID provided');
     }
-
+    
     const user = await User.findOne({ auth0Id: req.oidc.user.sub });
     console.log('User found:', user ? user.auth0Id : 'No user found');
-
+    
     if (!user) {
       console.log('User not found');
       return res.status(404).send('User not found');
     }
-
+    
     const originalCount = user.flashcards.length;
     user.flashcards = user.flashcards.filter(card => card._id.toString() !== flashcardId);
     const newCount = user.flashcards.length;
-
+    
     console.log(`Flashcards before: ${originalCount}, after: ${newCount}`);
-
+    
     if (originalCount === newCount) {
       console.log('No flashcard was removed');
       return res.status(404).send('Flashcard not found');
     }
-
+    
     await user.save();
     console.log('User saved successfully');
-
+    
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Error in remove-flashcard route:', error);
     res.status(500).send('Server error');
   } finally {
-    console.log('Remove flashcard route completed');  // This should always appear
+    console.log('Remove flashcard route completed');
+  }
+});
+
+// New route to add a deck
+router.post('/add-deck', requiresAuth(), async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    let user = await User.findOne({ auth0Id: req.oidc.user.sub });
+    
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    
+    user.decks.push({ name, description });
+    await user.save();
+    
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Error adding deck:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+// New route to remove a deck
+router.post('/remove-deck', requiresAuth(), async (req, res) => {
+  try {
+    const { deckId } = req.body;
+    let user = await User.findOne({ auth0Id: req.oidc.user.sub });
+    
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    
+    user.decks = user.decks.filter(deck => deck._id.toString() !== deckId);
+    user.flashcards = user.flashcards.filter(card => card.deckId.toString() !== deckId);
+    
+    await user.save();
+    
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Error removing deck:', error);
+    res.status(500).send('Server error');
   }
 });
 
