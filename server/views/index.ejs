@@ -1,58 +1,41 @@
 <%- include('partials/header') -%>
 
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  :root {
+    --framer-text-color: var(--token-32abb542-758d-4148-ab17-beace5424478, rgb(38, 38, 42));
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--framer-text-color);
+    background: linear-gradient(10deg, #a3c4e5 0%, #e2eaf2 50%);
+;
+
+    min-height: 100vh;
+  }
+</style>
 <div class="container mx-auto px-4 py-8">
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-4xl mx-auto">
     <div class="flex flex-col items-stretch gap-8">
       <!-- Welcome text and image - centered design -->
-      
-
-        
-
-        <% if (!locals.isAuthenticated) { %>
-          <div class="w-full p-8 flex flex-col justify-center items-center bg-white rounded-3xl shadow-md transform hover:scale-105 transition duration-300 ease-in-out text-center">
-            <h2 class="text-4xl font-bold mb-4 text-blue-600">Welcome to Flashcards Pro</h2>
-            <p class="text-gray-600 text-xl mb-8 max-w-2xl">
-              Master any subject with our intuitive flashcard system. Learn, revise, and excel!
-            </p>
-            
-          <div class="space-y-4">
-            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full inline-block transition duration-300 text-lg">
-              Get Started
-            </a>
-            <p class="text-gray-500">Sign in to create and manage your flashcards</p>
-          </div>
-        <% } %>
-      </div>
-      
-      <!-- User info section (only shown when authenticated) -->
-      <% if (locals.isAuthenticated) { %>
-        <div class="w-full p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
-          <div class="space-y-6">
-            <div class="flex items-center mb-4">
-              <% if (user.picture) { %>
-                <img class="w-20 h-20 rounded-full mr-6" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
-              <% } else { %>
-                <div class="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center mr-6">
-                  <span class="text-2xl font-bold text-white"><%= user.name.charAt(0) %></span>
-                </div>
-              <% } %>
-              <div>
-                <h3 class="text-2xl font-bold text-blue-600"><%= user.name %></h3>
-                <p class="text-gray-600"><%= user.nickname %></p>
-              </div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-inner">
-              <h4 class="text-lg font-semibold mb-3 text-gray-700">Account Information</h4>
-              <p class="mb-2"><strong>Email:</strong> <%= user.email %></p>
-              <p><strong>Given Name:</strong> <%= user.given_name %></p>
-            </div>
-            <div class="flex justify-between items-center">
-              <a href="/profile" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
-                View Profile
+      <% if (!locals.isAuthenticated) { %>
+        <div class="w-full p-8 flex flex-col justify-center items-center text-center">
+          <h1 class="text-6xl font-semibold mb-4">
+            Master any subject
+          </h1>
+          <h2 class="text-6xl font-semibold mb-8">
+            with Spaced Repetition learning
+          </h2>
+          <p class="text-xl mb-8 max-w-2xl">
+            Flashcards Pro uses spaced repetition and AI to help you learn faster and remember longer
+          </p>
+          
+          <div class="space-y-8 pt-12">
+            <div class="relative inline-block group">
+              <a href="/login" class="bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-lg inline-block transition duration-300 text-lg relative z-10">
+                Get Started
               </a>
-              <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
-                Logout
-              </a>
+              <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-swirl"></div>
             </div>
           </div>
         </div>
@@ -61,4 +44,50 @@
   </div>
 </div>
 
+<style>
+  @keyframes swirl {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .animate-swirl {
+    animation: swirl 10s linear infinite;
+  }
+</style>  
+<!-- User info section (only shown when authenticated) -->
+<% if (locals.isAuthenticated) { %>
+  <div class="w-full p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
+    <div class="space-y-6">
+      <div class="flex items-center mb-4">
+        <% if (user.picture) { %>
+          <img class="w-20 h-20 rounded-full mr-6" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
+        <% } else { %>
+          <div class="w-20 h-20 rounded-full bg-blue-500 flex items-center justify-center mr-6">
+            <span class="text-2xl font-bold text-white"><%= user.name.charAt(0) %></span>
+          </div>
+        <% } %>
+        <div>
+          <h3 class="text-2xl font-bold text-blue-600"><%= user.name %></h3>
+          <p class="text-gray-600"><%= user.nickname %></p>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-inner">
+        <h4 class="text-lg font-semibold mb-3 text-gray-700">Account Information</h4>
+        <p class="mb-2"><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Given Name:</strong> <%= user.given_name %></p>
+      </div>
+      <div class="flex justify-between items-center">
+        <a href="/profile" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
+          View Profile
+        </a>
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full inline-block transition duration-300">
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+<% } %>
 <%- include('partials/footer') -%>
