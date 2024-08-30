@@ -6,6 +6,19 @@
     <div class="flex flex-col items-stretch gap-8">
       <!-- Welcome text and image - centered design -->
       <% if (!locals.isAuthenticated) { %>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+          :root {
+            --framer-text-color: var(--token-32abb542-758d-4148-ab17-beace5424478, rgb(38, 38, 42));
+          }
+          body {
+            font-family: 'Inter', sans-serif;
+            color: var(--framer-text-color);
+            background: linear-gradient(10deg, #a3c4e5 0%, #e2eaf2 50%);
+        ;
+            min-height: 100vh;
+          }
+        </style>
         <div class="w-full p-8 flex flex-col justify-center items-center text-center">
           <h1 class="text-6xl font-semibold mb-4">
             Master any subject
