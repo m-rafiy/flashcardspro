@@ -1,19 +1,6 @@
 <%- include('partials/header') -%>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  :root {
-    --framer-text-color: var(--token-32abb542-758d-4148-ab17-beace5424478, rgb(38, 38, 42));
-  }
-  body {
-    font-family: 'Inter', sans-serif;
-    color: var(--framer-text-color);
-    background: linear-gradient(10deg, #a3c4e5 0%, #e2eaf2 50%);
-;
 
-    min-height: 100vh;
-  }
-</style>
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-4xl mx-auto">
     <div class="flex flex-col items-stretch gap-8">
@@ -29,7 +16,7 @@
           <p class="text-xl mb-8 max-w-2xl">
             Flashcards Pro uses spaced repetition and AI to help you learn faster and remember longer
           </p>
-          
+
           <div class="space-y-8 pt-12">
             <div class="relative inline-block group">
               <a href="/login" class="bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-lg inline-block transition duration-300 text-lg relative z-10">
@@ -56,8 +43,48 @@
   .animate-swirl {
     animation: swirl 10s linear infinite;
   }
-</style>  
-<!-- User info section (only shown when authenticated) -->
+</style>
+
+<style>
+  .nav-sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #2d3748;
+    color: white;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .nav-sidebar.open {
+    left: 0;
+  }
+
+  .content-wrapper {
+    transition: margin-left 0.3s ease-in-out;
+  }
+
+  .content-wrapper.nav-open {
+    margin-left: 250px;
+  }
+
+  .nav-toggle {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 1001;
+    background-color: #4a5568;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
 <% if (locals.isAuthenticated) { %>
   <div class="w-full p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
     <div class="space-y-6">
@@ -89,5 +116,42 @@
       </div>
     </div>
   </div>
+
+
+  <button class="nav-toggle" onclick="toggleNav()">☰</button>
+  <nav class="nav-sidebar">
+    <div class="p-4">
+      <h2 class="text-2xl font-bold mb-4">Your Decks</h2>
+      <ul class="space-y-2">
+        <% if (locals.decks && decks.length > 0) { %>
+          <% decks.forEach(function(deck) { %>
+            <li>
+              <a href="/deck/<%= deck._id %>" class="block py-2 px-4 hover:bg-gray-700 rounded transition duration-200">
+                <%= deck.name %>
+              </a>
+            </li>
+          <% }); %>
+        <% } else { %>
+          <li class="text-gray-400">No decks available</li>
+        <% } %>
+      </ul>
+      <div class="mt-8">
+        <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full block text-center transition duration-300">Dashboard</a>
+      </div>
+    </div>
+  </nav>
 <% } %>
+
+
+<script>
+  function toggleNav() {
+    const nav = document.querySelector('.nav-sidebar');
+    const content = document.querySelector('.content-wrapper');
+    nav.classList.toggle('open');
+    content.classList.toggle('nav-open');
+  }
+
+  // ... (keep the existing scroll event listener) ...
+</script>
+
 <%- include('partials/footer') -%>

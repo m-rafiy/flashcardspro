@@ -4,18 +4,32 @@ const { requiresAuth } = require('express-openid-connect');
 const User = require('../models/users');
 const mongoose = require('mongoose');
 
-router.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'FlashcardsPro',
-    isAuthenticated: req.oidc.isAuthenticated()
-  });
-});
-
-router.get('/profile', requiresAuth(), function (req, res, next) {
-  res.render('profile', {
-    userProfile: JSON.stringify(req.oidc.user, null, 2),
-    title: 'Profile page'
-  });
+router.get('/', async function (req, res, next) {
+  if (req.oidc.isAuthenticated()) {
+    try {
+      const user = await User.findOne({ auth0Id: req.oidc.user.sub });
+      const decks = user ? user.decks : [];
+      res.render('index', {
+        title: 'FlashcardsPro',
+        isAuthenticated: true,
+        user: req.oidc.user,
+        decks: decks
+      });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.render('index', {
+        title: 'FlashcardsPro',
+        isAuthenticated: true,
+        user: req.oidc.user,
+        decks: []
+      });
+    }
+  } else {
+    res.render('index', {
+      title: 'FlashcardsPro',
+      isAuthenticated: false
+    });
+  }
 });
 
 router.get('/dashboard', requiresAuth(), async (req, res) => {
@@ -170,6 +184,13 @@ router.post('/remove-deck', requiresAuth(), async (req, res) => {
     console.error('Error removing deck:', error);
     res.status(500).send('Server error');
   }
+});
+
+router.get('/profile', requiresAuth(), function (req, res, next) {
+  res.render('profile', {
+    userProfile: JSON.stringify(req.oidc.user, null, 2),
+    title: 'Profile page'
+  });
 });
 
 module.exports = router;
