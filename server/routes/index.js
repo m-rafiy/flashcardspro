@@ -186,11 +186,28 @@ router.post('/remove-deck', requiresAuth(), async (req, res) => {
   }
 });
 
-router.get('/profile', requiresAuth(), function (req, res, next) {
-  res.render('profile', {
-    userProfile: JSON.stringify(req.oidc.user, null, 2),
-    title: 'Profile page'
-  });
+router.get('/profile', requiresAuth(), async function (req, res, next) {
+  try {
+    const user = await User.findOne({ auth0Id: req.oidc.user.sub });
+    
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const decks = user.decks || [];
+    const userProfile = JSON.stringify(req.oidc.user, null, 2);
+
+    res.render('profile', {
+      title: 'User Profile',
+      isAuthenticated: true,
+      user: req.oidc.user,
+      decks: decks,
+      userProfile: userProfile
+    });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;

@@ -1,6 +1,7 @@
 <%- include('partials/header') -%>
 
 
+
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-4xl mx-auto">
     <div class="flex flex-col items-stretch gap-8">
@@ -58,47 +59,25 @@
   }
 </style>
 
+
 <style>
-  .nav-sidebar {
-    position: fixed;
-    left: -250px;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    background-color: #2d3748;
-    color: white;
-    transition: left 0.3s ease-in-out;
-    z-index: 1000;
-    overflow-y: auto;
+  @keyframes swirl {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
-
-  .nav-sidebar.open {
-    left: 0;
-  }
-
-  .content-wrapper {
-    transition: margin-left 0.3s ease-in-out;
-  }
-
-  .content-wrapper.nav-open {
-    margin-left: 250px;
-  }
-
-  .nav-toggle {
-    position: fixed;
-    left: 10px;
-    top: 10px;
-    z-index: 1001;
-    background-color: #4a5568;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
+  .animate-swirl {
+    animation: swirl 10s linear infinite;
   }
 </style>
 
+
 <% if (locals.isAuthenticated) { %>
+  <%- include('nav-bar') -%>
+
   <div class="w-full p-8 flex flex-col justify-center bg-gray-100 rounded-3xl shadow-md">
     <div class="space-y-6">
       <div class="flex items-center mb-4">
@@ -131,40 +110,7 @@
   </div>
 
 
-  <button class="nav-toggle" onclick="toggleNav()">☰</button>
-  <nav class="nav-sidebar">
-    <div class="p-4">
-      <h2 class="text-2xl font-bold mb-4">Your Decks</h2>
-      <ul class="space-y-2">
-        <% if (locals.decks && decks.length > 0) { %>
-          <% decks.forEach(function(deck) { %>
-            <li>
-              <a href="/deck/<%= deck._id %>" class="block py-2 px-4 hover:bg-gray-700 rounded transition duration-200">
-                <%= deck.name %>
-              </a>
-            </li>
-          <% }); %>
-        <% } else { %>
-          <li class="text-gray-400">No decks available</li>
-        <% } %>
-      </ul>
-      <div class="mt-8">
-        <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full block text-center transition duration-300">Dashboard</a>
-      </div>
-    </div>
-  </nav>
 <% } %>
 
 
-<script>
-  function toggleNav() {
-    const nav = document.querySelector('.nav-sidebar');
-    const content = document.querySelector('.content-wrapper');
-    nav.classList.toggle('open');
-    content.classList.toggle('nav-open');
-  }
 
-  // ... (keep the existing scroll event listener) ...
-</script>
-
-<%- include('partials/footer') -%>

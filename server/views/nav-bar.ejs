@@ -1,0 +1,112 @@
+<button class="sidebar-toggle">☰</button>
+<nav class="nav-sidebar">
+    <div>
+        <h2 class="text-2xl font-bold">Your Decks</h2>
+        <div class="deck-list">
+            <ul class="space-y-2">
+                <% if (locals.decks && decks.length > 0) { %>
+                    <% decks.forEach(function(deck) { %>
+                        <li>
+                            <a href="/deck/<%= deck._id %>" class="block py-2 px-4 hover:bg-blue-200 rounded transition duration-200">
+                                <%= deck.name %>
+                            </a>
+                        </li>
+                    <% }); %>
+                <% } else { %>
+                    <li class="text-gray-600">No decks available</li>
+                <% } %>
+            </ul>
+        </div>
+        <div class="mt-8">
+            <a href="/dashboard" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full block text-center transition duration-300">Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .nav-sidebar {
+        width: 250px;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #1a202c;
+        backdrop-filter: blur(16px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: -250px;
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+    }
+    .nav-sidebar.open {
+        left: 0;
+    }
+    .nav-sidebar > div {
+        padding: 16px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .nav-sidebar h2 {
+        padding: 16px 0;
+        margin: 0;
+    }
+    .nav-sidebar a {
+        color: #2d3748;
+        text-decoration: none;
+    }
+    .nav-sidebar a:hover {
+        background-color: rgba(147, 197, 253, 0.3);
+    }
+    .deck-list {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+    .sidebar-toggle {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        background-color: #4299e1;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+
+<script>
+    const sidebar = document.querySelector('.nav-sidebar');
+    const toggleButton = document.querySelector('.sidebar-toggle');
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        document.body.classList.toggle('sidebar-open');
+    }
+
+    toggleButton.addEventListener('click', toggleSidebar);
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+        if (touchEndX - touchStartX > 50 && touchStartX < 50) {
+            sidebar.classList.add('open');
+            document.body.classList.add('sidebar-open');
+        } else if (touchStartX - touchEndX > 50 && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+        }
+    }
+</script>

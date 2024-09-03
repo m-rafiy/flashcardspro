@@ -1,38 +1,45 @@
 <%- include('partials/header') -%>
+<%- include('nav-bar') -%>
 
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-md p-8">
-    <div class="flex flex-col md:flex-row items-center md:items-start mb-8">
-      <% if (user.picture) { %>
-        <img class="rounded-full w-32 h-32 object-cover mb-4 md:mb-0 md:mr-8" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
-      <% } else { %>
-        <div class="w-32 h-32 rounded-full bg-blue-500 flex items-center justify-center text-white text-4xl font-bold mb-4 md:mb-0 md:mr-8">
-          <%= user.nickname.charAt(0).toUpperCase() %>
+
+<div class="flex">
+
+  <div class="flex-1 overflow-y-auto">
+    <div class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-md p-8">
+        
+        <div class="flex flex-col md:flex-row items-center md:items-start mb-8">
+          <% if (user.picture) { %>
+            <img class="rounded-full w-32 h-32 object-cover mb-4 md:mb-0 md:mr-8" src="<%= user.picture %>" alt="<%= user.name %>'s profile picture">
+          <% } else { %>
+            <div class="w-32 h-32 rounded-full bg-blue-500 flex items-center justify-center text-white text-4xl font-bold mb-4 md:mb-0 md:mr-8">
+              <%= user.nickname.charAt(0).toUpperCase() %>
+            </div>
+          <% } %>
+          <div>
+            <h1 class="text-4xl font-bold text-blue-600 mb-2">Welcome, <%= user.nickname %>!</h1>
+            <p class="text-gray-600">We're glad to see you here.</p>
+          </div>
         </div>
-      <% } %>
-      <div>
-        <h1 class="text-4xl font-bold text-blue-600 mb-2">Welcome, <%= user.nickname %>!</h1>
-        <p class="text-gray-600">We're glad to see you here.</p>
-      </div>
-    </div>
 
-    <div class="bg-gray-100 rounded-2xl p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Your Profile Information</h2>
-      <p class="text-gray-700 mb-4">
-        This is the content of <code class="bg-gray-200 px-2 py-1 rounded">req.user</code>.<br>
-        <strong>Note:</strong> <code class="bg-gray-200 px-2 py-1 rounded">_raw</code> and <code class="bg-gray-200 px-2 py-1 rounded">_json</code> properties have been omitted.
-      </p>
-      <div class="bg-white rounded-lg p-4 shadow-inner">
-        <pre class="text-sm overflow-x-auto"><%= userProfile %></pre>
-      </div>
-    </div>
+        <div class="bg-gray-100 rounded-2xl p-6 mb-8">
+          <h2 class="text-2xl font-semibold mb-4">Your Profile Information</h2>
+          <p class="text-gray-700 mb-4">
+            This is the content of <code class="bg-gray-200 px-2 py-1 rounded">req.user</code>.<br>
+            <strong>Note:</strong> <code class="bg-gray-200 px-2 py-1 rounded">_raw</code> and <code class="bg-gray-200 px-2 py-1 rounded">_json</code> properties have been omitted.
+          </p>
+          <div class="bg-white rounded-lg p-4 shadow-inner">
+            <pre class="text-sm overflow-x-auto"><%= userProfile %></pre>
+          </div>
+        </div>
 
-    <div class="flex justify-center">
-      <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
-        Logout
-      </a>
+        <div class="flex justify-center">
+          <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+            Logout
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<%- include('partials/footer') -%>
